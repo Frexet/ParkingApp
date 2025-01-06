@@ -43,4 +43,9 @@ public class ParkingService
 
         return totalCost;
     }
+
+    public List<ParkingSession> GetAllSessions()
+    {
+        return _sessions;
+    }
 }

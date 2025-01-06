@@ -25,19 +25,19 @@ public class ParkingController : ControllerBase
     }
 
     // Ends the current parking session
-[HttpPost("end")]
-public IActionResult EndParking([FromBody] CarRequest request)
-{
-    if (request == null || string.IsNullOrWhiteSpace(request.CarId))
-        return BadRequest(new { message = "Car ID is required." });
+    [HttpPost("end")]
+    public IActionResult EndParking([FromBody] CarRequest request)
+    {
+        if (request == null || string.IsNullOrWhiteSpace(request.CarId))
+            return BadRequest(new { message = "Car ID is required." });
 
-    double cost = _parkingService.EndParking(request.CarId);
-    if (cost == -1)
-        return NotFound(new { message = "No active parking session found for this car.", request.CarId });
+        double cost = _parkingService.EndParking(request.CarId);
+        if (cost == -1)
+            return NotFound(new { message = "No active parking session found for this car.", request.CarId });
 
-    _userService.AddParkingCostToUser(request.CarId, cost);
-    return Ok(new { message = "Parking ended.", request.CarId, totalCost = cost });
-}
+        _userService.AddParkingCostToUser(request.CarId, cost);
+        return Ok(new { message = "Parking ended.", request.CarId, totalCost = cost });
+    }
 
     // Retrieves the current active parking session for a car
     [HttpGet("current/{carId}")]
@@ -51,5 +51,12 @@ public IActionResult EndParking([FromBody] CarRequest request)
             return NotFound(new { message = "No active parking session.", carId });
 
         return Ok(session);
+    }
+
+    [HttpGet("all")]
+    public IActionResult GetAllParkingSessions()
+    {
+        var sessions = _parkingService.GetAllSessions();
+        return Ok(sessions);
     }
 }
