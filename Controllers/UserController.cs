@@ -38,4 +38,13 @@ public class UserController : ControllerBase
         double totalCost = _userService.GetUserCost(userId);
         return Ok(new { userId, totalCost });
     }
+
+    [HttpPost("{userId}/charge")]
+    public IActionResult ChargeUser(string userId)
+    {
+        bool success = _userService.ChargeUser(userId);
+        if (!success) return NotFound(new { message = "User not found.", userId });
+
+        return Ok(new { message = "User has been charged, balance reset.", userId });
+    }
 }

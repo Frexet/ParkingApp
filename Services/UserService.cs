@@ -1,6 +1,6 @@
 public class UserService
 {
-    private readonly List<User> _users = new(); 
+    private readonly List<User> _users = new();
 
     // Registers a new user with their car.
     public void RegisterUser(string userId, string carId)
@@ -30,4 +30,17 @@ public class UserService
             user.TotalCost += cost;
         }
     }
+
+    public bool ChargeUser(string userId)
+    {
+        var user = _users.Find(u => u.UserId == userId);
+        if (user == null) return false; // User not found
+
+        user.TotalCost = 0;  // Resets the total cost after the user has paid
+        user.HasPaid = true;  // Marks the user as paid
+
+        return true; // Success
+    }
+
+
 }
