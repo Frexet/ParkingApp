@@ -21,7 +21,7 @@ public class UserController : ControllerBase
         return Ok(new { message = "User registered successfully.", userId = user.UserId, carId = user.CarId });
     }
 
-    // Hämta användardetaljer
+    // Retrieve user details
     [HttpGet("{userId}")]
     public IActionResult GetUserDetails(string userId)
     {
@@ -31,7 +31,7 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    // Hämta användarens totala parkeringskostnad
+    // Retrieve the user's total parking cost
     [HttpGet("{userId}/cost")]
     public IActionResult GetUserCost(string userId)
     {
