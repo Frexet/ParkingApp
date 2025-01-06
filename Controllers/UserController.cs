@@ -11,10 +11,12 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    // Registrera en användare med bil
     [HttpPost("register")]
     public IActionResult RegisterUser([FromBody] User user)
     {
+        if (user == null || string.IsNullOrWhiteSpace(user.UserId) || string.IsNullOrWhiteSpace(user.CarId))
+            return BadRequest(new { message = "Invalid input. User ID and Car ID are required." });
+
         _userService.RegisterUser(user.UserId, user.CarId);
         return Ok(new { message = "User registered successfully.", userId = user.UserId, carId = user.CarId });
     }

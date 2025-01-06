@@ -34,3 +34,4 @@
 /Users/fredrickarlsson/Documents/School/Trials/ParkingApp/obj/Debug/net9.0/ParkingApp.pdb
 /Users/fredrickarlsson/Documents/School/Trials/ParkingApp/obj/Debug/net9.0/ParkingApp.genruntimeconfig.cache
 /Users/fredrickarlsson/Documents/School/Trials/ParkingApp/obj/Debug/net9.0/ref/ParkingApp.dll
+/Users/fredrickarlsson/Documents/School/Trials/ParkingApp/obj/Debug/net9.0/ParkingApp.sourcelink.json
