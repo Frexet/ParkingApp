@@ -20,7 +20,10 @@ public class ParkingController : ControllerBase
         if (request == null || string.IsNullOrWhiteSpace(request.CarId))
             return BadRequest(new { message = "Car ID is required." });
 
-        _parkingService.StartParking(request.CarId);
+        bool success = _parkingService.StartParking(request.CarId);
+        if (!success)
+            return Conflict(new { message = "A parking session is already active for this car.", request.CarId });
+
         return Ok(new { message = "Parking started.", carId = request.CarId });
     }
 
@@ -48,7 +51,7 @@ public class ParkingController : ControllerBase
 
         var session = _parkingService.GetCurrentParking(carId);
         if (session == null)
-            return NotFound(new { message = "No active parking session.", carId });
+            return NotFound(new { message = "No active parking session found.", carId });
 
         return Ok(session);
     }

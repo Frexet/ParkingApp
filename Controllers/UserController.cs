@@ -15,9 +15,12 @@ public class UserController : ControllerBase
     public IActionResult RegisterUser([FromBody] User user)
     {
         if (user == null || string.IsNullOrWhiteSpace(user.UserId) || string.IsNullOrWhiteSpace(user.CarId))
-            return BadRequest(new { message = "Invalid input. User ID and Car ID are required." });
+            return BadRequest(new { message = "User ID and Car ID are required." });
 
-        _userService.RegisterUser(user.UserId, user.CarId);
+        bool success = _userService.RegisterUser(user.UserId, user.CarId);
+        if (!success)
+            return Conflict(new { message = "User ID or Car ID is already registered." });
+
         return Ok(new { message = "User registered successfully.", userId = user.UserId, carId = user.CarId });
     }
 
@@ -35,8 +38,11 @@ public class UserController : ControllerBase
     [HttpGet("{userId}/cost")]
     public IActionResult GetUserCost(string userId)
     {
-        double totalCost = _userService.GetUserCost(userId);
-        return Ok(new { userId, totalCost });
+        double cost = _userService.GetUserCost(userId);
+        if (cost == -1)
+            return NotFound(new { message = "User not found or has no recorded parking sessions.", userId });
+
+        return Ok(new { userId, totalCost = cost });
     }
 
     [HttpPost("{userId}/charge")]

@@ -3,9 +3,14 @@ public class ParkingService
     private readonly List<ParkingSession> _sessions = new(); // Tracks active and past parking sessions
 
     // Starts a new parking session for a car
-    public void StartParking(string carId)
+    public bool StartParking(string carId)
     {
+        var existingSession = _sessions.Find(s => s.CarId == carId && s.EndTime == null);
+        if (existingSession != null)
+            return false; // Prevents duplicate active sessions
+
         _sessions.Add(new ParkingSession { CarId = carId, StartTime = DateTime.Now });
+        return true;
     }
 
     // Ends an active parking session and calculates the cost
@@ -13,11 +18,10 @@ public class ParkingService
     {
         var session = _sessions.Find(s => s.CarId == carId && s.EndTime == null);
         if (session == null)
-            return -1; // No active session found
+            return -1; // Indicate no active session
 
         session.EndTime = DateTime.Now;
         session.Cost = CalculateCost(session.StartTime, session.EndTime.Value);
-
         return session.Cost;
     }
 

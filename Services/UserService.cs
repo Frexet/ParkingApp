@@ -3,9 +3,13 @@ public class UserService
     private readonly List<User> _users = new();
 
     // Registers a new user with their car.
-    public void RegisterUser(string userId, string carId)
+    public bool RegisterUser(string userId, string carId)
     {
+        if (_users.Exists(u => u.UserId == userId || u.CarId == carId))
+            return false; // Prevent duplicate users or cars
+
         _users.Add(new User { UserId = userId, CarId = carId, TotalCost = 0 });
+        return true;
     }
 
     // Retrieves user details by user ID.
@@ -18,7 +22,10 @@ public class UserService
     public double GetUserCost(string userId)
     {
         var user = _users.Find(u => u.UserId == userId);
-        return user?.TotalCost ?? 0;
+        if (user == null)
+            return -1; // Indicate user not found
+
+        return user.TotalCost;
     }
 
     // Adds parking cost to the user's total balance.
