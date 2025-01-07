@@ -1,28 +1,32 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Lägg till Controllers
+// Register controllers to handle API requests
 builder.Services.AddControllers();
 
-// Lägg till Swagger
+// Configure Swagger for API documentation
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Lägg till tjänster för Dependency Injection (valfritt men rekommenderat)
-builder.Services.AddSingleton<ParkingService>();
-builder.Services.AddSingleton<UserService>();
+// Register services for Dependency Injection
+builder.Services.AddSingleton<ParkingService>(); // Manages parking logic
+builder.Services.AddSingleton<UserService>();    // Manages user-related operations
 
 var app = builder.Build();
 
-// Använd Swagger endast i utvecklingsläge
+// Enable Swagger only in development mode to prevent exposure in production
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Routing & Controllers
+// Enforce HTTPS redirection for secure communication
 app.UseHttpsRedirection();
+
+// Enable authentication/authorization (if implemented)
 app.UseAuthorization();
+
+// Map API controllers to handle incoming requests
 app.MapControllers();
 
 app.Run();
